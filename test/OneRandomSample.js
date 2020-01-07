@@ -29,6 +29,7 @@ contract('OneRandomSample', ([deployer, author, responder]) => {
 
   describe('polls', async () => {
     let result, pollCount, txHash;
+    let sentVote;
 
     it('can create a poll', async () => {
       result = await ors.createPoll(
@@ -36,8 +37,6 @@ contract('OneRandomSample', ([deployer, author, responder]) => {
         'well',
         'not so well',
         'amazing',
-        100,
-        5000,
         {
           from: author
         }
@@ -48,12 +47,20 @@ contract('OneRandomSample', ([deployer, author, responder]) => {
       // pollCount = await ors.pollIdCounter();
     });
 
-    // it('can list all polls', async () => {
-    //   // TODO
-    // });
+    it('allows users to vote on polls', async () => {
+      result = await ors.createPoll(
+        'how do you do?',
+        'well',
+        'not so well',
+        'amazing',
+        {
+          from: author
+        }
+      );
 
-    // it('allows users to submit to polls and get prize payout', async () => {
-    //   // TODO
-    // });
+      sentVote = await ors.sendVote(1, 1);
+
+      // console.log('result from sent', sent);
+    });
   });
 });
