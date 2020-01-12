@@ -32,15 +32,9 @@ contract('OneRandomSample', ([deployer, author, responder]) => {
     let sentVote;
 
     it('can create a poll', async () => {
-      result = await ors.createPoll(
-        'how do you do?',
-        'well',
-        'not so well',
-        'amazing',
-        {
-          from: author
-        }
-      );
+      result = await ors.createPoll('how do you do?', 'well', 'not so well', {
+        from: author
+      });
 
       txHash = result.tx;
       assert.lengthOf(txHash, 66, 'string has length of 66');
