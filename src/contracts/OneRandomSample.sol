@@ -1,36 +1,42 @@
 pragma solidity ^0.5.0;
 
 contract OneRandomSample {
-  string public name;
-  uint public pollIdCounter = 0;
-  mapping(uint => Poll) public polls;
+  address public owner;
+  string public question;
+  address[] public voters;
+  Option[] public options;
+  uint public totalVotes;
+  uint public prizePot;
+  uint public endDate;
 
-  struct Poll {
-    uint id;
-    string question;
-    string option1;
-    string option2;
-    string option3;
-    uint prizePot;
-    uint endTime;
-    address author;
+  struct Option {
+    string optionName;
+    uint voteCount;
   }
 
-  constructor() public {
-    name = "one random sample contract";
+  struct Voter {
+    address who;
+    uint vote;
   }
 
-  function createPoll
-    (
-      string memory _question,
-      string memory _option1,
-      string memory _option2,
-      string memory _option3,
-      uint _prizePot,
-      uint _endTime
-    )
-    public {
-      pollIdCounter++;
-      polls[pollIdCounter] = Poll(pollIdCounter, _question, _option1, _option2, _option3, _prizePot, _endTime, msg.sender);
-    }
+  constructor(string memory _question, string memory _option1, string memory _option2) public payable {
+    owner = msg.sender;
+    prizePot = msg.value;
+    endDate = block.timestamp + 24 hours;
+    question = _question;
+    options.push(Option(_option1, 0));
+    options.push(Option(_option2, 0));
+  }
+
+  function sendVote(uint voteId) public {
+    // Get 
+    Option memory _chosenOption = options[voteId];
+    // Update
+    _chosenOption.voteCount++;
+    // Set
+    options[voteId] = _chosenOption;
+
+    // Add sender to voters
+    voters.push(msg.sender);
+  }
 }
